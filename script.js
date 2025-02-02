@@ -2,7 +2,13 @@
 function fetchUser() {
   showSpinner();
   fetch("https://randomuser.me/api/")
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Request Failed.");
+      }
+      return response.json();
+    })
+
     .then((data) => {
       hideSpinner();
       console.log(data.results[0]);
@@ -25,6 +31,13 @@ function fetchUser() {
       } else {
         document.body.style.backgroundColor = "#3485bf";
       }
+    })
+    .catch((error) => {
+      hideSpinner();
+      document.body.style.backgroundColor = " #bbbfbc";
+      document.querySelector("#user").innerHTML = `
+      <p class='text-3xl text-center text-red-500 mb-5'>${error}</p>
+      `;
     });
 }
 function showSpinner() {
@@ -37,11 +50,23 @@ function hideSpinner() {
 function fetchUser1() {
   showSpinner();
   fetch("https://randomuser.me/api/")
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Request Failed.");
+      }
+      return response.json();
+    })
     .then((data) => {
       console.log(data.results[0]);
-      displayUser(data.results[0]);
       hideSpinner();
+      displayUser(data.results[0]);
+    })
+    .catch((error) => {
+      hideSpinner();
+      document.body.style.backgroundColor = " #bbbfbc";
+      document.querySelector("#user").innerHTML = `
+      <p class='text-3xl text-center text-red-500 mb-5'>${error}</p>
+      `;
     });
 }
 function displayUser(user) {
@@ -79,3 +104,4 @@ function displayUser(user) {
 }
 document.querySelector("#generate").addEventListener("click", fetchUser);
 fetchUser();
+
